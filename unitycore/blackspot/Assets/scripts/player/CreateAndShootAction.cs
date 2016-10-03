@@ -21,12 +21,21 @@ public class CreateAndShootAction : MonoBehaviour {
     public float holdballtimelimit = 10;
 
 	public bool usingMouse = false;
+	public bool usingVive = false;
+	public bool usingGVRController = false;
 
 	//using mouse
 	public bool mouseClickDown = false;
 	public bool mouseClickUp = false;
 	public bool mouseclickholding = false;
 	//using mouse
+
+	//using gvrcontroller
+	private bool gvrClickdown = false;
+	private bool gvrClickup = false;
+	private bool gvrClickholding = false;
+	private Quaternion gvrOrientation;
+	//using gvrcontroller
 
     void Awake()
     {
@@ -86,7 +95,7 @@ public class CreateAndShootAction : MonoBehaviour {
 
 			}
 		}
-		else
+		else if(usingVive)
 		{
 			var device = SteamVR_Controller.Input((int)trackedobj.index);
 			triggerpull = device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger);
@@ -133,7 +142,53 @@ public class CreateAndShootAction : MonoBehaviour {
 				ballmade = false;
 			}
 		}
+		else if(usingGVRController)
+		{
+			gvrClickdown = GvrController.ClickButtonDown;
+			gvrClickup = GvrController.ClickButtonUp;
+			gvrClickholding = GvrController.ClickButton;
+			gvrOrientation = GvrController.Orientation;
+			transform.rotation = gvrOrientation;
 
+			if(gvrClickdown && !ballmade)
+			{
+				GameObject newball = Instantiate(ballobj, spotlocation.position, Quaternion.identity) as GameObject;
+				newball.GetComponent<Rigidbody>().isKinematic = true;
+				newball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+				newball.transform.parent = transform;
+				ballmade = true;
+				currentball = newball;
+			}
+
+			if(gvrClickholding && ballmade)
+			{
+
+				holdballtime += Time.deltaTime;
+
+				if (holdballtime > holdballtimelimit)
+				{
+					Rigidbody rbody = currentball.GetComponent<Rigidbody>();
+					currentball.transform.parent = null;
+					rbody.isKinematic = false;
+					rbody.constraints = RigidbodyConstraints.None;
+					float speed = ballspeed * (10 * holdballtime);
+					rbody.AddForce(transform.forward *speed);
+					holdballtime = 0;
+				}
+			}
+
+			if(gvrClickup && ballmade)
+			{
+				Rigidbody rbody = currentball.GetComponent<Rigidbody>();
+				currentball.transform.parent = null;
+				rbody.isKinematic = false;
+				rbody.constraints = RigidbodyConstraints.None;
+				float speed = ballspeed * (10 * holdballtime);
+				rbody.AddForce(transform.forward * speed);
+				holdballtime = 0;
+				ballmade = false;
+			}
+		}
 	}
 }
        
