@@ -19,7 +19,7 @@ public class floorhitaction : MonoBehaviour {
         Color colorA = currentmat.color;
         colorA.a = 0;
         currentmat.color = colorA;
-   //     gmstaticref = GameObject.FindGameObjectWithTag("gmanager").GetComponent<GMstatics>();
+        gmstaticref = GameObject.FindGameObjectWithTag("gmanager").GetComponent<GMstatics>();
     }
 
     public virtual void OnCollisionEnter(Collision col)

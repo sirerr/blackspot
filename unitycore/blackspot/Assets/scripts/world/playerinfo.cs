@@ -13,19 +13,19 @@ public class playerinfo : MonoBehaviour
     public Transform controller2;
 
 
-    void Awake()
-    {
-        GameObject camrig = GameObject.FindGameObjectWithTag("Player");
-        controllerobj1 = camrig.transform.GetChild(0).gameObject;
-        controllerobj2 = camrig.transform.GetChild(1).gameObject;
-        playerheadobj = camrig.transform.GetChild(2).gameObject;
+    //void Awake()
+    //{
+    //    GameObject camrig = GameObject.FindGameObjectWithTag("Player");
+    //    controllerobj1 = camrig.transform.GetChild(0).gameObject;
+    //    controllerobj2 = camrig.transform.GetChild(1).gameObject;
+    //    playerheadobj = camrig.transform.GetChild(2).gameObject;
 
-        playerheight = playerheadobj.transform;
-        controller1 = controllerobj1.transform;
-        controller2 = controllerobj2.transform;
+    //    playerheight = playerheadobj.transform;
+    //    controller1 = controllerobj1.transform;
+    //    controller2 = controllerobj2.transform;
 
 
-    }
+    //}
 
 
 
